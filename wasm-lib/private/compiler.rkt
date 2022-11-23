@@ -5,10 +5,10 @@
 (require racket/match
          threading
          wasm/private/error
-         wasm/private/memory
-         wasm/private/runtime
+         ; wasm/private/memory
+         ; wasm/private/runtime
          wasm/private/store
-         wasm/private/switch
+         ; wasm/private/switch
          "core.rkt"
          "custom-name-section.rkt"
          "opcase.rkt")

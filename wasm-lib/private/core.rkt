@@ -1,12 +1,8 @@
-#lang racket/base
+#lang rosette/safe
 
-(require (for-syntax racket/base
-                     racket/syntax)
-         racket/function
-         racket/generic
-         racket/match
-         syntax/parse
-         syntax/parse/define)
+(require
+  syntax/parse/define
+  (for-syntax (only-in racket/syntax format-id) (only-in syntax/parse define-literal-set)))
 
 ;; values ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -39,9 +35,9 @@
   #:methods gen:type
   [(define/generic super-unify type-unify)
    (define (type-unify t other)
-     (match t
-       [(typevar _ #f) (begin0 #t (set-typevar-vt! t other))]
-       [(typevar _ vt) (super-unify vt other)]))])
+     (cond
+       [(not (typevar-vt t)) (begin0 #t (set-typevar-vt! t other))]
+       [else (super-unify (typevar-vt t) other)]))])
 
 (define-syntax-parser define-valtype
   [(_ name:id)
